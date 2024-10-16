@@ -18,7 +18,7 @@ Install PyTorch following instructions from https://pytorch.org/ and Install Tra
 
 ## Usage
 
-##Step1. Data prepare
+Step1. Data prepare
 The first step involves preparing the dataset needed for model training. This requires inputting the beta values of CpG sites for each sample, the sequence of 400 bp surrounding each CpG site from the reference genome (hg19), and the SNV information for each sample, which can be derived from genomic sequencing.
 
 In detail: The β values are converted into a binary classification of hypermethylation (1) or hypomethylation (0), using a beta value threshold of 0.5. Based on SNV information, we replaced the reference sequence at the corresponding positions within the 400 bp window spanning the targeted CpG site. In a population, for each identical DNA sequence, only those with the same methylation status are retained, while DNA sequences showing both hypermethylated and hypomethylated statuses (0 and 1) are removed. This resulted into a dataset, which was randomly divided into training and testing datasets in a 7:3 ratio. Those can be further used for model training and testing.
@@ -54,7 +54,6 @@ cpg_betavalue.csv: the beta values of CpG sites for each sample
   <tr>
    <td style="text-align:right;text-align: center;"> … </td>
    <td style="text-align:right;text-align: center;">   </td>
-   <td style="text-align:left;text-align: center;">   </td>
    <td style="text-align:left;text-align: center;">   </td>
   </tr>
 </tbody>
@@ -101,7 +100,7 @@ cpg_refseq.csv: the sequence of 400 bp surrounding each CpG site from the refere
 </table>  
 
 snp.vcf: the SNP information for each sample
-<table class="table table-responsive-{sm|md|lg|xl" style="font-size: 5px; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table table-responsive-{sm|md|lg|xl" style="font-size: 1px; width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
    <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;text-align: center;"> #CHROM </th>
@@ -214,7 +213,7 @@ The results outputted to output_files include the final dataset, containing trai
 </tbody>
 </table>  
 
-##Step2. Model training
+Step2. Model training
 To develop the Methylformer, we leveraged a foundation model that was pre-trained on DNA sequences, namely the Nucleotide Transformer (reference).  We utilized the Hugging Face's transformers library to implement the Nucleotide Transformer.  Additionally, we enhanced the model by adding a binary classification layer to predict methylation status. For performance evaluation, we used the Matthews Correlation Coefficient (MCC) as the primary ranking metric, and other parameters (pls add). The best performing parameter (MCC) on predicting sequences from the testing dataset were saved.
 
 ```bash
@@ -227,7 +226,7 @@ $python 2_model_training.py
 
 ```
 
-##Step3. Methylformer prediction
+Step3. Methylformer prediction
 
 3.1 Predict sequences
 
@@ -287,6 +286,7 @@ seq_prediction.csv: predicted results.
   </tr>
 </tbody>
 </table>  
+
 
 3.2 Predict methylation regulatory variation
 Methylformer can be used to predict DNAm regulatory genetic variations. 400bp sequences spanning the target CpG sites need to be input. Then, we used the target SNV information to replace corresponding reference alleles to generate the mutant sequence. Methylformer to predict the methylation status of the CpG sites located on a reference (wt) or a mutant (mt) DNA fragment. We then calculated the predicted DNA methylation difference (delta score) between reference and mutated sequences. Specifically, the delta score is calculated as the methylation status of the mutated sequence minus that of the reference sequence.  The delta score of 1 or -1 signifies an increased or decreased DNA methylation levels of a specific CpG site, and we define those SNVs as DNAm regulatory variants. 
