@@ -18,6 +18,7 @@ Install PyTorch following instructions from https://pytorch.org/ and Install Tra
 
 ## Usage
 
+
 Step1. Data preparation 
 
 The first step involves preparing the dataset needed for model training. This requires inputting the β values (quantifying DNA methylation levels) of CpG sites for each sample (can be from different tissues), a 400bp DNA sequence spanning each CpG site based on the human reference genome (hg19), and the SNVs information (derived from whole genome sequencing) for each sample.
@@ -212,6 +213,7 @@ The results outputted to output_files include the final dataset, containing trai
 </tbody>
 </table>  
 
+
 Step2. Model training
 
 To develop the Methylformer, we leveraged a Nucleotide Transformer[1]. foundation model that was pre-trained on billions of DNA sequences. We utilized the Hugging Face's transformers library to implement the Nucleotide Transformer. Additionally, we enhanced the model by adding a binary classification layer to predict DNA methylation status. For performance evaluation, we used the Matthews Correlation Coefficient (MCC) as the primary ranking metric, and other parameters (pls add). The best performing parameter (MCC) on predicting sequences from the testing dataset were saved.
@@ -225,6 +227,7 @@ $python 2_model_training.py
 	--output_dir ./model_output/
 
 ```
+
 
 Step3. Methylformer prediction
 
