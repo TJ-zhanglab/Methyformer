@@ -19,7 +19,9 @@ Install PyTorch following instructions from https://pytorch.org/ and Install Tra
 ## Usage
 
 Step1. Data preparation 
+
 The first step involves preparing the dataset needed for model training. This requires inputting the β values (quantifying DNA methylation levels) of CpG sites for each sample (can be from different tissues), a 400bp DNA sequence spanning each CpG site based on the human reference genome (hg19), and the SNVs information (derived from whole genome sequencing) for each sample.
+
 In detail: The β values are converted into a binary classification of hypermethylation (1) or hypomethylation (0), using a β value threshold of 0.5. Based on SNV information, we replaced the human reference sequence at the corresponding positions within the 400 bp window spanning the targeted CpG site. In a population, for each identical DNA sequence, only those with the same methylation status are retained, while DNA sequences showing both hypermethylated and hypomethylated statuses (0 and 1) in a population are removed. This process generated a dataset, which was randomly divided into training and testing datasets in a 7:3 ratio. That can be further used for model training and testing.
 
 The example input file (cpg_betavalue.csv) include the β values of CpG sites of each sample.
@@ -211,6 +213,7 @@ The results outputted to output_files include the final dataset, containing trai
 </table>  
 
 Step2. Model training
+
 To develop the Methylformer, we leveraged a Nucleotide Transformer[1]. foundation model that was pre-trained on billions of DNA sequences. We utilized the Hugging Face's transformers library to implement the Nucleotide Transformer. Additionally, we enhanced the model by adding a binary classification layer to predict DNA methylation status. For performance evaluation, we used the Matthews Correlation Coefficient (MCC) as the primary ranking metric, and other parameters (pls add). The best performing parameter (MCC) on predicting sequences from the testing dataset were saved.
 
 ```bash
@@ -283,9 +286,10 @@ The example output file (seq_prediction.csv) include Methylformer predicted resu
 
 
 3.2 Prediction of DNA methylation regulatory variants
-Methylformer can be used to predict DNAm regulatory genetic variations. The 400bp DNA sequences spanning the target CpG sites can be used for prediction. Then, we used the target SNV information to replace corresponding reference alleles to generate the variant sequence. Methylformer predicts the DNA methylation status of the CpG sites located on a reference (wt) or a variant (vt) DNA fragment. We then calculated the predicted DNA methylation difference (delta score) between reference and variant sequences. Specifically, the delta score is calculated as the methylation status of the variant sequence minus that of the reference sequence. The delta score of 1 or -1 signifies an increased or decreased DNA methylation levels of a specific CpG site, and we define those SNVs as DNAm regulatory variants.
-The example input file (cpgref_forpredict.csv) include the DNA sequence of 400 bp surrounding candidate CpG sites from the reference genome (hg19).
 
+Methylformer can be used to predict DNAm regulatory genetic variations. The 400bp DNA sequences spanning the target CpG sites can be used for prediction. Then, we used the target SNV information to replace corresponding reference alleles to generate the variant sequence. Methylformer predicts the DNA methylation status of the CpG sites located on a reference (wt) or a variant (vt) DNA fragment. We then calculated the predicted DNA methylation difference (delta score) between reference and variant sequences. Specifically, the delta score is calculated as the methylation status of the variant sequence minus that of the reference sequence. The delta score of 1 or -1 signifies an increased or decreased DNA methylation levels of a specific CpG site, and we define those SNVs as DNAm regulatory variants.
+
+The example input file (cpgref_forpredict.csv) include the DNA sequence of 400 bp surrounding candidate CpG sites from the reference genome (hg19).
 
 <table class="table table-responsive-{sm|md|lg|xl" style="font-size: 5px; width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
@@ -370,8 +374,7 @@ snp_forpredict.csv：candidate DNA methylation regulatory variants
 </tbody>
 </table>  
 
-Output files include:
-Methylformer-CNS_results.csv
+Output file: Methylformer-CNS_results.csv
 
 <table class="table table-responsive-{sm|md|lg|xl" style="font-size: 5px; width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
